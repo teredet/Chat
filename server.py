@@ -5,6 +5,7 @@ from twisted.internet.protocol import ServerFactory, connectionDone
 class ServerProtocol(LineOnlyReceiver):
     factory: 'Server'
     login: str = None
+    logins: list
 
     def connectionMade(self):
         self.factory.clients.append(self)
@@ -24,10 +25,19 @@ class ServerProtocol(LineOnlyReceiver):
         
         elif self.login is None:
             if content.startswith("login:"):
-                self.login = content.replace("login:", "")
-                self.sendLine("Welcome!".encode())
+                user_login = content.replace("login:", "")
+                
+                if user_login not in self.logins:
+                    self.login = user_login
+                    self.logins.append(user_login)
+                    self.sendLine("Welcome!".encode())
+
+                elif user_login in self.logins:
+                    self.sendLine(f"Login {user_login} is already in use.".encode())
+
             else:
                 self.sendLine("Invalid login".encode())
+
 
 class Server(ServerFactory):
     protocol = ServerProtocol
@@ -35,6 +45,7 @@ class Server(ServerFactory):
     
     def startFactory(self):
         self.clients = []
+        self.protocol.logins = []
         print("Server started")
 
     def stopFactory(self):
