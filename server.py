@@ -4,6 +4,7 @@ from twisted.internet.protocol import ServerFactory, connectionDone
 
 class ServerProtocol(LineOnlyReceiver):
     factory: 'Server'
+    login: str = None
 
     def connectionMade(self):
         self.factory.clients.append(self)
@@ -13,11 +14,20 @@ class ServerProtocol(LineOnlyReceiver):
 
     def lineReceived(self, line: bytes):
         content = line.decode()
-        content = f"Message from USER: {content}"
 
+        if self.login is not None:
+            content = f"Message from {self.login}: {content}"
 
-        for user in self.factory.clients:
-            user.sendLine(content.encode())
+            for user in self.factory.clients:
+                if user is not self:
+                    user.sendLine(content.encode())
+        
+        elif self.login is None:
+            if content.startswith("login:"):
+                self.login = content.replace("login:", "")
+                self.sendLine("Welcome!".encode())
+            else:
+                self.sendLine("Invalid login".encode())
 
 class Server(ServerFactory):
     protocol = ServerProtocol
