@@ -14,21 +14,30 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(628, 765)
+        MainWindow.resize(435, 460)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setStyleSheet("QWidget {\n"
+"    font-family: Arial, sans-serif;\n"
+"    font-size:16px;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    text-transform: uppercase;\n"
+"}\n"
+"")
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit.setReadOnly(True)
         self.plainTextEdit.setObjectName("plainTextEdit")
-        self.verticalLayout.addWidget(self.plainTextEdit)
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setObjectName("lineEdit")
-        self.verticalLayout.addWidget(self.lineEdit)
+        self.gridLayout.addWidget(self.plainTextEdit, 0, 0, 1, 2)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.gridLayout.addWidget(self.pushButton, 2, 1, 1, 1)
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.gridLayout.addWidget(self.lineEdit, 2, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -38,5 +47,5 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.plainTextEdit.setPlaceholderText(_translate("MainWindow", "The new message will be here..."))
-        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Enter new message here..."))
         self.pushButton.setText(_translate("MainWindow", "Send"))
+        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Enter new message here..."))

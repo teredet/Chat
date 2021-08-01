@@ -45,6 +45,9 @@ class ServerProtocol(LineOnlyReceiver):
                 self.login = user_login
                 self.sendLine("Welcome!".encode())
                 self.send_history()
+                for user in self.factory.clients:
+                    if user != self and user.login != None:
+                        user.sendLine(f"{self.login} conected.".encode()) 
             elif self.is_login_taken(user_login):
                 self.sendLine(f"Login \"{user_login}\" is already in use.".encode())
                 return
@@ -55,7 +58,7 @@ class ServerProtocol(LineOnlyReceiver):
     def lineReceived(self, line: bytes):
         content = line.decode()
         if self.login is not None:
-            content = f"Message from {self.login}: {content}"
+            content = f"{self.login}: {content}"
             self.store_history(content)
             for user in self.factory.clients:
                 if user.login != None:
