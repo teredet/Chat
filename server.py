@@ -16,8 +16,9 @@ class ServerProtocol(LineOnlyReceiver):
     def is_login_taken(self, login: str):
         is_taken = False
         for user in self.factory.clients:
-            if user.login == login:
+            if user.login == login: 
                 is_taken = True
+                break
         return is_taken
 
     def store_history(self, message: str):
@@ -57,7 +58,7 @@ class ServerProtocol(LineOnlyReceiver):
             content = f"Message from {self.login}: {content}"
             self.store_history(content)
             for user in self.factory.clients:
-                if user is not self and user.login != None:
+                if user.login != None:
                     user.sendLine(content.encode())        
         elif self.login is None:
             self.login_user(content)
