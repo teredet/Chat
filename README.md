@@ -1,4 +1,4 @@
-## Asynchronous client-server Chat
+## Asynchronous client-server Chat with PyQT5 interface.
 ![alt text](img/1.png)
 
 # Download & Setup Instructions :
@@ -34,3 +34,4 @@ git clone https://github.com/teredet/Chat
 * Python
 * PyQt5
 * Twisted
+
